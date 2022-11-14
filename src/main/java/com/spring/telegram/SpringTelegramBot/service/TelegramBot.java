@@ -1,6 +1,7 @@
 package com.spring.telegram.SpringTelegramBot.service;
 
 import com.spring.telegram.SpringTelegramBot.config.BotConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
  * response by chatID.
  */
 @Component
+@Slf4j
 public class TelegramBot extends TelegramLongPollingBot {
 
     @Autowired
@@ -69,12 +71,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     /**
      * The startCommandReceived method for getting from chatID userName
+     * And save in Log File, Users who were came
      *
      * @param chatID chat ID
      * @param name   looking name
      */
     private void startCommandReceived(long chatID, String name) {
         String answer = "Hi userName " + name + " ,this is TelegramBot";
+        log.info("User by name come in: !!! = " + name);
         sendMessage(chatID, answer);
     }
 
@@ -93,7 +97,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            log.error("Error occurred: " + e.getMessage());
         }
     }
 }
